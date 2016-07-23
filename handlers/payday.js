@@ -90,6 +90,7 @@ function _insertPayday(body, callback){
 		console.log("insert body: " + body.heart);
 		console.log("insert body: " + body.charge);
 		console.log("insert body: " + body.currentBoxId);
+		console.log("pickItems: " + body.pickItems);
 		var data = new userDataModel();
         data.did = body.did;
         data.email = body.email;
@@ -118,7 +119,7 @@ function _insertPayday(body, callback){
     	var boxData = new boxDataModel();
     	boxData.box = "true";
     	boxData.bdata = new Array(data.length);
-    	
+
     	var i = 0;
     	for(var i = 0; i < data.length; i++){
             var idata = {
@@ -131,7 +132,7 @@ function _insertPayday(body, callback){
                 nextId: data[i].nextId
             }
     		boxData.bdata[i] = idata;
-    		console.log("boxData i: " + boxData.bdata[i].name);
+    		//console.log("arr i: " + arr[i].name);
     	}
     	//console.log("boxdata: " + JSON.stringify(boxdata));
     	boxData.save(callback);
@@ -170,7 +171,8 @@ function _updatePayday(where, body, callback){
 					userData.heart = body.heart;
 					userData.charge = body.charge;
 					userData.currentBoxId = body.currentBoxId;
-					userData.pickItems = body.pickItems;
+					console.log("update body pickItems: " + JSON.stringify(body.pickItems));
+					userData.pickItems = JSON.stringify(body.pickItems);
 					userData.getPush = body.getPush;
 					userData.save(callback);	
 				}
@@ -182,5 +184,8 @@ function _updatePayday(where, body, callback){
 function _removePayday(where, callback){
 	if(where.email != null && where.did != null){
 		userDataModel.remove(where, callback);
+	}
+	else if(where.box != null){
+		boxDataModel.remove(where, callback);
 	}
 }
